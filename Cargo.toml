@@ -1,8 +1,2 @@
-[package]
-authors = ["lhvy <cookiecoder15@gmail.com>", "Aramis Razzaghipour <aramisnoah@gmail.com>"]
-edition = "2018"
-license = "MIT OR Apache-2.0"
-name = "exploding-bots"
-version = "0.1.0"
-
-[dependencies]
+[workspace]
+members = ["crates/*"]
