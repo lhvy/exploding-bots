@@ -30,6 +30,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "human-client"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "jsonl",
+]
+
+[[package]]
 name = "instant"
 version = "0.1.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
