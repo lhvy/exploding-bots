@@ -71,7 +71,7 @@ impl Card {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub struct User {
+pub struct Player {
     pub id: Uuid,
     pub name: String,
 }
@@ -81,8 +81,8 @@ pub enum Event {
     Draw { bottom: bool },
     Explode,
     Play { card: Card },
-    // Nope { user: User },
-    BeginTurn { user: User },
+    // Nope { player: Player },
+    BeginTurn { player: Player },
     EndTurn,
 }
 
@@ -90,9 +90,9 @@ pub enum Event {
 pub enum Action {
     Draw,
     Play { cards: Vec<Card> },
-    Attack { target: User },
-    Steal { target: User },
-    Take { target: User, card: Card },
+    Attack { target: Player },
+    Steal { target: Player },
+    Take { target: Player, card: Card },
     DiscardTake { card: Card },
     AlterTheFuture { cards: [Card; 3] },
 }

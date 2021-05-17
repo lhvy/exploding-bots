@@ -4,7 +4,7 @@ use num::Integer;
 use std::io::{self, BufReader};
 use std::net::{TcpListener, TcpStream};
 use std::thread;
-use types::{Card, User};
+use types::{Card, Player};
 use uuid::Uuid;
 
 fn main() -> anyhow::Result<()> {
@@ -73,11 +73,11 @@ fn accept_connections(
                 let mut stream = stream.unwrap();
 
                 let name = jsonl::read(BufReader::new(&mut stream))?;
-                let user = User {
+                let player = Player {
                     id: Uuid::new_v4(),
                     name,
                 };
-                let client = Client { user, stream };
+                let client = Client { player, stream };
 
                 clients.push(client);
 
@@ -109,7 +109,7 @@ fn listen(listener: TcpListener, stream_tx: Sender<TcpStream>) {
 
 #[derive(Debug)]
 struct Client {
-    user: User,
+    player: Player,
     stream: TcpStream,
 }
 
