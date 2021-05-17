@@ -7,7 +7,7 @@ version = "0.1.0"
 
 [dependencies]
 anyhow = "1.0.40"
-flume = {version = "0.10.5", default_features = false}
+flume = {version = "0.10.5", default_features = false, features = ["select"]}
 jsonl = "4.0.1"
 parking_lot = "0.11.1"
 types = {path = "../types"}
