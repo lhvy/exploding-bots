@@ -9,6 +9,8 @@ version = "0.1.0"
 anyhow = "1.0.40"
 flume = {version = "0.10.5", default_features = false, features = ["select"]}
 jsonl = "4.0.1"
+nanorand = {version = "0.5.2", default_features = false, features = ["wyrand", "std"]}
+num = "0.4.0"
 parking_lot = "0.11.1"
 types = {path = "../types"}
 uuid = {version = "0.8.2", features = ["v4"]}

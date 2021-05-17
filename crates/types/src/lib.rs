@@ -23,6 +23,29 @@ pub enum Card {
 }
 
 impl Card {
+    pub fn all_cards() -> impl Iterator<Item = Self> {
+        std::array::IntoIter::new([
+            Self::ExplodingKitten,
+            Self::Defuse,
+            Self::Attack,
+            Self::TargetedAttack,
+            Self::DrawFromTheBottom,
+            Self::Favor,
+            // Self::Nope,
+            Self::Shuffle,
+            Self::Skip,
+            Self::Reverse,
+            Self::SeeTheFuture,
+            Self::AlterTheFuture,
+            Self::TacoCat,
+            Self::WatermelonCat,
+            Self::PotatoCat,
+            Self::BeardCat,
+            Self::RainbowCat,
+            Self::FeralCat,
+        ])
+    }
+
     pub fn amount_in_deck(self) -> usize {
         match self {
             Self::ExplodingKitten => 5,
