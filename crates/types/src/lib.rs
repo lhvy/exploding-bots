@@ -97,3 +97,8 @@ pub enum Action {
     DiscardTake { card: Card },
     AlterTheFuture { cards: [Card; 3] },
 }
+
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
+pub struct InitialState {
+    pub players: Vec<Player>,
+}

@@ -4,7 +4,7 @@ use num::Integer;
 use std::io::{self, BufReader};
 use std::net::{TcpListener, TcpStream};
 use std::thread;
-use types::{Card, Player};
+use types::{Card, Event, InitialState, Player};
 use uuid::Uuid;
 
 fn main() -> anyhow::Result<()> {
@@ -20,8 +20,33 @@ fn main() -> anyhow::Result<()> {
     let clients = accept_connections_handle.join().unwrap()?;
 
     let mut rng = WyRand::new();
-    let decks = gen_decks(clients.len(), &mut rng);
-    dbg!(decks);
+    let _decks = gen_decks(clients.len(), &mut rng);
+
+    let initial_state = InitialState {
+        players: clients
+            .iter()
+            .map(|Client { player, .. }| player.clone())
+            .collect(),
+    };
+
+    tell_all_clients(&clients, &initial_state)?;
+
+    loop {
+        for Client { player, .. } in &clients {
+            tell_all_clients(
+                &clients,
+                &Event::BeginTurn {
+                    player: player.clone(),
+                },
+            )?;
+        }
+    }
+}
+
+fn tell_all_clients<T: serde::Serialize>(clients: &[Client], t: &T) -> anyhow::Result<()> {
+    for Client { stream, .. } in clients {
+        jsonl::write(stream, t)?;
+    }
 
     Ok(())
 }

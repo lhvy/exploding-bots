@@ -50,6 +50,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "jsonl",
+ "types",
 ]
 
 [[package]]
@@ -280,6 +281,7 @@ dependencies = [
  "nanorand",
  "num",
  "parking_lot",
+ "serde",
  "types",
  "uuid",
 ]

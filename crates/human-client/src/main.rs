@@ -1,4 +1,6 @@
+use std::io::BufReader;
 use std::net::TcpStream;
+use types::{Event, InitialState};
 
 const NAME: &str = "human client";
 
@@ -7,5 +9,13 @@ fn main() -> anyhow::Result<()> {
 
     jsonl::write(&mut stream, &NAME)?;
 
-    Ok(())
+    let mut stream = BufReader::new(&mut stream);
+
+    let initial_state: InitialState = jsonl::read(&mut stream)?;
+    dbg!(initial_state);
+
+    loop {
+        let event: Event = jsonl::read(&mut stream)?;
+        dbg!(event);
+    }
 }

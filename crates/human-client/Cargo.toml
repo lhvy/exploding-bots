@@ -8,3 +8,4 @@ version = "0.1.0"
 [dependencies]
 anyhow = "1.0.40"
 jsonl = "4.0.1"
+types = {path = "../types"}
