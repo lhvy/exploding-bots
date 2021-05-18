@@ -7,4 +7,4 @@ version = "0.1.0"
 
 [dependencies]
 serde = {version = "1.0.125", features = ["derive"]}
-uuid = "0.8.2"
+uuid = {version = "0.8.2", features = ["serde"]}
