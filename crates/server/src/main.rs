@@ -1,10 +1,11 @@
+mod card_setup;
+
 use flume::{Receiver, Selector, Sender};
-use nanorand::{WyRand, RNG};
-use num::Integer;
+use nanorand::WyRand;
 use std::io::{self, BufReader};
 use std::net::{TcpListener, TcpStream};
 use std::thread;
-use types::{Card, Event, InitialState, Player};
+use types::{Event, InitialState, Player};
 use uuid::Uuid;
 
 fn main() -> anyhow::Result<()> {
@@ -20,16 +21,22 @@ fn main() -> anyhow::Result<()> {
     let clients = accept_connections_handle.join().unwrap()?;
 
     let mut rng = WyRand::new();
-    let _decks = gen_decks(clients.len(), &mut rng);
 
-    let initial_state = InitialState {
-        players: clients
-            .iter()
-            .map(|Client { player, .. }| player.clone())
-            .collect(),
-    };
+    let players: Vec<_> = clients
+        .iter()
+        .map(|Client { player, .. }| player.clone())
+        .collect();
 
-    tell_all_clients(&clients, &initial_state)?;
+    let (_deck, hands) = card_setup::set_up_cards(players.len(), &mut rng);
+
+    for (Client { stream, .. }, hand) in clients.iter().zip(hands) {
+        let initial_state = InitialState {
+            players: players.clone(),
+            hand: hand.cards,
+        };
+
+        jsonl::write(stream, &initial_state)?;
+    }
 
     loop {
         for Client { player, .. } in &clients {
@@ -49,33 +56,6 @@ fn tell_all_clients<T: serde::Serialize>(clients: &[Client], t: &T) -> anyhow::R
     }
 
     Ok(())
-}
-
-fn gen_decks(num_players: usize, rng: &mut WyRand) -> Vec<Card> {
-    let num_decks = num_players.div_ceil(&Card::ExplodingKitten.amount_in_deck());
-    let mut deck = Vec::new();
-
-    for card in Card::all_cards() {
-        if card == Card::ExplodingKitten {
-            continue;
-        }
-
-        for _ in 0..card.amount_in_deck() {
-            deck.push(card);
-        }
-    }
-
-    deck = deck.repeat(num_decks);
-
-    // so that there is always one less exploding kitten
-    // than number of players
-    for _ in 0..num_players - 1 {
-        deck.push(Card::ExplodingKitten);
-    }
-
-    rng.shuffle(&mut deck);
-
-    deck
 }
 
 fn accept_connections(

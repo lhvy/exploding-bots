@@ -101,4 +101,5 @@ pub enum Action {
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
 pub struct InitialState {
     pub players: Vec<Player>,
+    pub hand: Vec<Card>,
 }
